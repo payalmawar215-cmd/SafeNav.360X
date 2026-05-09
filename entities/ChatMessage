@@ -1,0 +1,72 @@
+{
+  "name": "ChatMessage",
+  "type": "object",
+  "properties": {
+    "sender_id": {
+      "type": "string",
+      "description": "User ID of sender"
+    },
+    "sender_name": {
+      "type": "string",
+      "description": "Display name of sender"
+    },
+    "recipient_id": {
+      "type": "string",
+      "description": "User ID of recipient (contact)"
+    },
+    "contact_phone": {
+      "type": "string",
+      "description": "Phone number of the contact"
+    },
+    "content": {
+      "type": "string",
+      "description": "Message text"
+    },
+    "is_emergency": {
+      "type": "boolean",
+      "default": false,
+      "description": "Emergency highlighted message"
+    },
+    "location_shared": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether location was shared in this message"
+    },
+    "lat": {
+      "type": "number"
+    },
+    "lng": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "sender_id",
+    "content"
+  ],
+  "rls": {
+    "create": {
+      "data.sender_id": "{{user.id}}"
+    },
+    "read": {
+      "$or": [
+        {
+          "data.sender_id": "{{user.id}}"
+        },
+        {
+          "data.recipient_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "data.sender_id": "{{user.id}}"
+    },
+    "delete": {
+      "data.sender_id": "{{user.id}}"
+    }
+  }
+}

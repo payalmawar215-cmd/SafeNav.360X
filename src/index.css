@@ -1,0 +1,219 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-inter: 'Inter', sans-serif;
+
+    /* ── Premium Navy + Off-White Design System ── */
+    --background:        214 42% 11%;   /* #0D1B2E deep navy */
+    --foreground:        220 15% 92%;   /* soft white text */
+
+    --card:              0 0% 94%;      /* #EFF1F5 off-white */
+    --card-foreground:   214 42% 12%;   /* dark navy text on cards */
+
+    --popover:           214 38% 14%;
+    --popover-foreground:220 15% 92%;
+
+    --primary:           207 68% 59%;   /* #4A9EE0 accent blue */
+    --primary-foreground:0 0% 100%;
+
+    --secondary:         214 35% 18%;
+    --secondary-foreground:220 15% 75%;
+
+    --muted:             214 32% 16%;
+    --muted-foreground:  220 10% 55%;
+
+    --accent:            214 35% 18%;
+    --accent-foreground: 220 15% 92%;
+
+    --destructive:       0 80% 58%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border:            214 28% 20%;
+    --input:             214 28% 18%;
+    --ring:              207 68% 59%;
+    --radius:            1rem;
+
+    /* Semantic tokens */
+    --safe:     160 65% 40%;
+    --safe-foreground: 0 0% 100%;
+    --caution:  38 90% 50%;
+    --caution-foreground: 0 0% 8%;
+    --danger:   0 80% 58%;
+    --danger-foreground: 0 0% 100%;
+
+    /* Surface tokens */
+    --surface-1:  214 38% 14%;
+    --surface-2:  214 35% 18%;
+    --navy-card:  214 40% 13%;
+
+    --chart-1: 207 68% 59%;
+    --chart-2: 160 65% 40%;
+    --chart-3: 38 90% 50%;
+    --chart-4: 0 80% 58%;
+    --chart-5: 270 65% 62%;
+
+    --sidebar-background: 214 45% 9%;
+    --sidebar-foreground: 220 15% 80%;
+    --sidebar-primary: 207 68% 59%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 214 35% 15%;
+    --sidebar-accent-foreground: 220 15% 80%;
+    --sidebar-border: 214 28% 16%;
+    --sidebar-ring: 207 68% 59%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    letter-spacing: -0.01em;
+  }
+  body {
+    @apply bg-background text-foreground font-inter;
+    overscroll-behavior: none;
+    background-color: #0D1B2E;
+  }
+}
+
+/* ── LEAFLET OVERLAY Z-INDEX FIX ── */
+/* Ensure all custom Leaflet overlays sit above tile layers */
+.leaflet-pane { z-index: 400 !important; }
+.leaflet-tile-pane { z-index: 200 !important; }
+.leaflet-overlay-pane { z-index: 400 !important; }
+.leaflet-shadow-pane { z-index: 500 !important; }
+.leaflet-marker-pane { z-index: 600 !important; }
+.leaflet-tooltip-pane { z-index: 650 !important; }
+.leaflet-popup-pane { z-index: 700 !important; }
+.leaflet-map-pane { z-index: 0 !important; }
+.leaflet-top,
+.leaflet-bottom { z-index: 1000 !important; }
+
+/* Custom marker icons — always on top */
+.custom-user-marker,
+.custom-user-marker > div,
+.report-marker,
+.report-marker > div,
+.leaflet-div-icon { background: transparent !important; border: none !important; }
+
+/* Leaflet popups */
+.leaflet-popup { z-index: 900 !important; }
+.leaflet-popup-content-wrapper {
+  background: #111E30 !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5) !important;
+  color: white !important;
+}
+.leaflet-popup-tip { background: #111E30 !important; }
+.leaflet-popup-content { color: white; font-family: 'Inter', sans-serif; }
+
+/* ── Premium Card Styles ── */
+.card-navy {
+  background: #111E30;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 20px;
+}
+
+.card-white {
+  background: #EFF1F5;
+  border-radius: 20px;
+  color: #0D1B2E;
+}
+
+.card-white-sm {
+  background: #EFF1F5;
+  border-radius: 16px;
+  color: #0D1B2E;
+}
+
+/* ── Icon Container ── */
+.icon-container {
+  background: #EFF1F5;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.8);
+}
+
+.icon-container-navy {
+  background: #0D1B2E;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(255,255,255,0.12);
+}
+
+/* ── Accent Blue ── */
+.accent-blue { color: #4A9EE0; }
+.bg-accent-blue { background: #4A9EE0; }
+.border-accent-blue { border-color: #4A9EE0; }
+
+/* ── Premium Button ── */
+.btn-primary {
+  background: #4A9EE0;
+  color: white;
+  border-radius: 14px;
+  font-weight: 600;
+  transition: all 0.18s ease;
+}
+.btn-primary:hover { filter: brightness(1.08); }
+.btn-primary:active { transform: scale(0.97); }
+
+.btn-white {
+  background: #EFF1F5;
+  color: #0D1B2E;
+  border-radius: 14px;
+  font-weight: 600;
+  transition: all 0.18s ease;
+}
+
+/* ── Typography Scale ── */
+.heading-xl { font-size: 1.75rem; font-weight: 800; letter-spacing: -0.03em; }
+.heading-lg { font-size: 1.375rem; font-weight: 700; letter-spacing: -0.02em; }
+.heading-md { font-size: 1.1rem; font-weight: 700; letter-spacing: -0.02em; }
+.heading-sm { font-size: 0.925rem; font-weight: 600; }
+.body-md    { font-size: 0.875rem; font-weight: 400; }
+.body-sm    { font-size: 0.8125rem; }
+.label-xs   { font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+
+/* ── SOS ── */
+.sos-glow {
+  box-shadow: 0 0 0 4px rgba(239,68,68,0.2), 0 4px 24px rgba(239,68,68,0.4);
+}
+
+/* ── Shimmer ── */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.shimmer {
+  background: linear-gradient(90deg, transparent 25%, rgba(255,255,255,0.05) 50%, transparent 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* ── Pulse ring for SOS ── */
+@keyframes sos-pulse {
+  0% { transform: scale(1); opacity: 0.7; }
+  100% { transform: scale(1.7); opacity: 0; }
+}
+
+/* ── Fade in up ── */
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-in-up { animation: fade-in-up 0.35s ease-out both; }
+
+.safe-area-bottom { padding-bottom: env(safe-area-inset-bottom, 16px); }
+button, a, [role="button"] { user-select: none; -webkit-user-select: none; }
+::-webkit-scrollbar { width: 2px; height: 2px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 99px; }

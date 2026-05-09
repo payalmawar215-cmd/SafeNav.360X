@@ -1,0 +1,117 @@
+{
+  "name": "IncidentReport",
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "harassment",
+        "unsafe_street",
+        "suspicious",
+        "poor_lighting",
+        "other"
+      ],
+      "description": "Type of incident"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the incident"
+    },
+    "lat": {
+      "type": "number",
+      "description": "Latitude of the incident"
+    },
+    "lng": {
+      "type": "number",
+      "description": "Longitude of the incident"
+    },
+    "location_name": {
+      "type": "string",
+      "description": "Human readable location name"
+    },
+    "city": {
+      "type": "string",
+      "description": "City where incident occurred"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "flagged",
+        "resolved"
+      ],
+      "default": "pending",
+      "description": "Admin review status"
+    },
+    "trust_score": {
+      "type": "number",
+      "description": "Community trust score 0-100"
+    },
+    "anonymous": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether report is anonymous"
+    },
+    "media_url": {
+      "type": "string",
+      "description": "Uploaded photo/audio URL"
+    },
+    "upvotes": {
+      "type": "number",
+      "default": 0,
+      "description": "Community upvotes"
+    },
+    "reporter_id": {
+      "type": "string",
+      "description": "Reporter user ID (empty if anonymous)"
+    }
+  },
+  "required": [
+    "type",
+    "lat",
+    "lng"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "data.status": "approved"
+        },
+        {
+          "created_by": "{{user.email}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}
