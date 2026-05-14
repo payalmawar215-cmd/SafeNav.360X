@@ -1,8 +1,6 @@
 import { motion } from 'framer-motion';
-import { MessageCircle, Users, Shield, ChevronRight, Plus } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { MessageCircle, Users, Shield, ChevronRight } from 'lucide-react';
 import { getAnonymousId, getDisplayName, timeLabel } from '@/lib/chatUtils';
-import { cn } from '@/lib/utils';
 
 export default function ChatContactList({ contacts, recentMessages, onSelectContact, onSelectGroup, sosActive }) {
   const anonId = getAnonymousId();

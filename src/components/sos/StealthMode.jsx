@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '@/lib/AppContext.jsx';
-import { Calculator, Delete } from 'lucide-react';
 
 // Stealth mode: disguised as a calculator. Enter "911" to trigger SOS silently.
 export default function StealthMode({ onClose }) {

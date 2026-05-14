@@ -1,14 +1,12 @@
 import { useState, useEffect } from 'react';
-import { useLanguage } from '@/lib/i18n.jsx';
 import { useAppContext } from '@/lib/AppContext.jsx';
 import { base44 } from '@/api/base44Client';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  FileText, MapPin, CheckCircle2, Clock, Shield, Send,
-  Loader2, ThumbsUp, RefreshCw, ImagePlus, Newspaper, Brain, Plus
+  FileText, MapPin, CheckCircle2, Clock, Send,
+  Loader2, ThumbsUp, RefreshCw, ImagePlus, Newspaper, Brain
 } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
-import { cn } from '@/lib/utils';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import LiveNewsSection from '@/components/report/LiveNewsSection';
 import RiskAnalysisSection from '@/components/report/RiskAnalysisSection';
@@ -34,6 +32,26 @@ function timeAgo(d) {
   return `${Math.floor(s/3600)}h ago`;
 }
 
+// Local storage helpers for offline-first reports
+const LOCAL_REPORTS_KEY = 'safenav_local_reports';
+function getLocalReports() {
+  return JSON.parse(localStorage.getItem(LOCAL_REPORTS_KEY) || '[]');
+}
+function saveLocalReport(report) {
+  const reports = getLocalReports();
+  reports.unshift(report);
+  localStorage.setItem(LOCAL_REPORTS_KEY, JSON.stringify(reports.slice(0, 100)));
+  return report;
+}
+function updateLocalReport(id, updates) {
+  const reports = getLocalReports();
+  const idx = reports.findIndex(r => r.id === id);
+  if (idx >= 0) {
+    reports[idx] = { ...reports[idx], ...updates };
+    localStorage.setItem(LOCAL_REPORTS_KEY, JSON.stringify(reports));
+  }
+}
+
 export default function Report() {
   const { userLocation } = useAppContext();
   const queryClient = useQueryClient();
@@ -47,15 +65,27 @@ export default function Report() {
 
   const { data: reports = [], isLoading, refetch } = useQuery({
     queryKey: ['reports'],
-    queryFn: () => base44.entities.IncidentReport.list('-created_date', 25),
+    queryFn: async () => {
+      try {
+        const backendReports = await base44.entities.IncidentReport.list('-created_date', 25);
+        return backendReports;
+      } catch {
+        // Fallback to local reports when backend is unavailable
+        return getLocalReports();
+      }
+    },
     refetchInterval: 15000,
   });
 
   useEffect(() => {
-    const unsub = base44.entities.IncidentReport.subscribe(() => {
-      queryClient.invalidateQueries({ queryKey: ['reports'] });
-    });
-    return unsub;
+    try {
+      const unsub = base44.entities.IncidentReport.subscribe(() => {
+        queryClient.invalidateQueries({ queryKey: ['reports'] });
+      });
+      return unsub;
+    } catch {
+      // Subscription not available offline
+    }
   }, [queryClient]);
 
   const createMutation = useMutation({
@@ -63,11 +93,28 @@ export default function Report() {
       let media_url = null;
       if (mediaFile) {
         setUploadingMedia(true);
-        const { file_url } = await base44.integrations.Core.UploadFile({ file: mediaFile });
-        media_url = file_url;
+        try {
+          const { file_url } = await base44.integrations.Core.UploadFile({ file: mediaFile });
+          media_url = file_url;
+        } catch {
+          // File upload failed — continue without media
+        }
         setUploadingMedia(false);
       }
-      return base44.entities.IncidentReport.create({ ...data, media_url });
+      try {
+        return await base44.entities.IncidentReport.create({ ...data, media_url });
+      } catch {
+        // Backend unavailable — save locally
+        const localReport = {
+          ...data,
+          media_url,
+          id: `local_${Date.now()}`,
+          created_date: new Date().toISOString(),
+          status: 'pending',
+          _local: true,
+        };
+        return saveLocalReport(localReport);
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['reports'] });
@@ -78,7 +125,14 @@ export default function Report() {
   });
 
   const upvoteMutation = useMutation({
-    mutationFn: ({ id, upvotes }) => base44.entities.IncidentReport.update(id, { upvotes: upvotes + 1 }),
+    mutationFn: ({ id, upvotes }) => {
+      try {
+        return base44.entities.IncidentReport.update(id, { upvotes: upvotes + 1 });
+      } catch {
+        updateLocalReport(id, { upvotes: upvotes + 1 });
+        return Promise.resolve();
+      }
+    },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['reports'] }),
   });
 
@@ -87,8 +141,8 @@ export default function Report() {
     const trustScore = Math.min(100, 50 + (description.length > 30 ? 20 : 10) + (mediaFile ? 15 : 0) + (anonymous ? -10 : 5));
     createMutation.mutate({
       type: selectedType, description,
-      lat: userLocation.lat, lng: userLocation.lng,
-      location_name: `${userLocation.lat.toFixed(4)}, ${userLocation.lng.toFixed(4)}`,
+      lat: userLocation?.lat, lng: userLocation?.lng,
+      location_name: userLocation ? `${userLocation.lat.toFixed(4)}, ${userLocation.lng.toFixed(4)}` : 'Unknown',
       trust_score: trustScore, anonymous, upvotes: 0,
     });
   };
@@ -196,7 +250,7 @@ export default function Report() {
               style={{ background: '#111E30', border: '1px solid rgba(255,255,255,0.07)' }}>
               <MapPin className="w-3.5 h-3.5" style={{ color: '#4A9EE0' }} />
               <span style={{ color: 'rgba(255,255,255,0.45)' }}>
-                {userLocation.lat.toFixed(5)}, {userLocation.lng.toFixed(5)}
+                {userLocation?.lat?.toFixed(5)}, {userLocation?.lng?.toFixed(5)}
               </span>
             </div>
 

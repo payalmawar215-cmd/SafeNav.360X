@@ -3,9 +3,7 @@ import { useLanguage } from '@/lib/i18n.jsx';
 import { useAppContext } from '@/lib/AppContext.jsx';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Search, MapPin, Navigation, X, Clock, Route, Shield,
-  ChevronRight, AlertTriangle, Loader2, Layers, Target,
-  Zap, TrendingUp
+  Search, MapPin, Navigation, X, Clock, Route, Loader2, Layers, Target
 } from 'lucide-react';
 import SafetyBadge from '@/components/common/SafetyBadge';
 import { INDIAN_LOCATIONS } from '@/lib/mockData';
@@ -22,12 +20,14 @@ import RoutePolylines from '@/components/navigate/RoutePolylines';
 import SafetyHeatmap from '@/components/navigate/SafetyHeatmap';
 import NavigationMode from '@/components/navigate/NavigationMode';
 
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
-  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
-});
+if (typeof L !== 'undefined' && L.Icon && L.Icon.Default) {
+  delete L.Icon.Default.prototype._getIconUrl;
+  L.Icon.Default.mergeOptions({
+    iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
+    iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+  });
+}
 
 const ROUTE_STYLES = {
   safest:   { color: '#22C55E', label: 'Safest Route',   icon: '🛡️' },
@@ -290,13 +290,14 @@ export default function Navigate() {
 
       {/* ── Full-screen Map ── */}
       <div className="absolute inset-0">
-        <MapContainer
-          center={[userLocation.lat, userLocation.lng]}
-          zoom={14}
-          style={{ height: '100%', width: '100%' }}
-          zoomControl={false}
-          attributionControl={false}
-        >
+          {userLocation && (
+            <MapContainer
+              center={[userLocation.lat, userLocation.lng]}
+              zoom={14}
+              style={{ height: '100%', width: '100%' }}
+              zoomControl={false}
+              attributionControl={false}
+            >
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             maxZoom={19}
@@ -332,6 +333,7 @@ export default function Navigate() {
           {/* Safety heatmap overlay */}
           <SafetyHeatmap reports={reports} visible={heatmapVisible} />
         </MapContainer>
+        )}
       </div>
 
       {/* ── Loading overlay ── */}

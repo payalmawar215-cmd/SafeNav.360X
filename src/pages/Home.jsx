@@ -1,18 +1,14 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useLanguage } from '@/lib/i18n.jsx';
 import { useAppContext } from '@/lib/AppContext.jsx';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import {
   MapPin, Shield, Users, Navigation, Bell, MessageCircle,
-  ChevronRight, Clock, AlertTriangle, CheckCircle2, Mic, Camera,
-  TrendingUp, Activity, Zap, UserCircle, Plus, Phone
+  ChevronRight, Clock, AlertTriangle, UserCircle
 } from 'lucide-react';
 import MapView from '@/components/map/MapView';
 import { calculateSafetyScore } from '@/lib/mockData';
-import NotificationBell from '@/components/notifications/NotificationBell';
 import { getNotificationHistory } from '@/lib/notificationEngine';
 
 function timeAgo(d) {
@@ -137,7 +133,7 @@ export default function Home() {
               <div className="flex items-center gap-1.5 mt-1.5">
                 <MapPin className="w-3.5 h-3.5" style={{ color: '#4A9EE0' }} />
                 <span className="text-xs" style={{ color: 'rgba(13,27,46,0.5)' }}>
-                  {userLocation.lat.toFixed(4)}, {userLocation.lng.toFixed(4)}
+                  {userLocation?.lat?.toFixed(4)}, {userLocation?.lng?.toFixed(4)}
                 </span>
               </div>
               <div className="flex items-center gap-1.5 mt-1">

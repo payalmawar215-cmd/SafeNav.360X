@@ -1,6 +1,5 @@
 import { useAppContext } from '@/lib/AppContext.jsx';
-import { Battery, Signal, WifiOff, Wifi } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Battery, Signal, WifiOff } from 'lucide-react';
 
 export default function StatusBar() {
   const { isOnline, batteryLevel, networkType } = useAppContext();

@@ -37,6 +37,18 @@
     },
     "lng": {
       "type": "number"
+    },
+    "messageType": {
+      "type": "string",
+      "description": "Type of message (text, location, alert)"
+    },
+    "status": {
+      "type": "string",
+      "description": "Delivery status (sent, pending, read)"
+    },
+    "mapLink": {
+      "type": "string",
+      "description": "Google Maps link for location sharing"
     }
   },
   "required": [

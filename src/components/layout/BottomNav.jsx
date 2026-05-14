@@ -1,7 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { useLanguage } from '@/lib/i18n.jsx';
 import { Home, Navigation, FileText, Settings } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 
 const navItems = [

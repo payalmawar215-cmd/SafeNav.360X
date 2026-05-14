@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Shield, ArrowRight, UserPlus, LogIn } from 'lucide-react';
+import { Shield, UserPlus, LogIn } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 
 const LOGO_URL = 'https://media.base44.com/images/public/69e449b5017790d72143e6e1/7c2a3f74f_LS20260509103541.png';

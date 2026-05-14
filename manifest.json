@@ -1,0 +1,15 @@
+{
+  "short_name": "SafeNav360X",
+  "name": "SafeNav360X - Women Safety Intelligence",
+  "icons": [
+    {
+      "src": "https://base44.com/logo_v2.svg",
+      "type": "image/svg+xml",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#0D1B2E",
+  "background_color": "#0D1B2E"
+}

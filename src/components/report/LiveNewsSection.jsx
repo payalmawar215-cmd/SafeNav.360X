@@ -1,8 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
-import { Newspaper, Pin, PinOff, ExternalLink, RefreshCw, Loader2, MapPin, Clock, AlertTriangle } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Newspaper, Pin, PinOff, ExternalLink, RefreshCw, Loader2, MapPin, Clock } from 'lucide-react';
 
 const CACHE_KEY = 'safenav_news_cache';
 const CACHE_TS_KEY = 'safenav_news_ts';
@@ -97,6 +96,20 @@ export default function LiveNewsSection() {
     JSON.parse(localStorage.getItem(PINNED_KEY) || '[]')
   );
 
+// Built-in mock safety news for when API is unavailable
+const MOCK_NEWS = [
+  { id: 'n1', title: 'Chain snatching incidents rise near Andheri station', description: 'Mumbai police report 3 chain snatching cases near Andheri railway station in the past week. Extra patrols have been deployed during evening hours.', location: 'Andheri, Mumbai', source: 'Times Now', url: '#', publishedAt: new Date(Date.now() - 2 * 3600000).toISOString(), incidentType: 'chain_snatching', riskLevel: 'High' },
+  { id: 'n2', title: 'Street lighting restored in Chandni Chowk after complaints', description: 'Following community reports on SafeNav360X, MCD has restored street lighting in the narrow lanes of Chandni Chowk. Residents say they feel safer.', location: 'Chandni Chowk, Delhi', source: 'NDTV', url: '#', publishedAt: new Date(Date.now() - 5 * 3600000).toISOString(), incidentType: 'poor_lighting', riskLevel: 'Low' },
+  { id: 'n3', title: 'Suspicious vehicle reported near Koramangala park', description: 'Residents have flagged a suspicious vehicle parked near a children\'s park in Koramangala for three consecutive nights. Police are investigating.', location: 'Koramangala, Bangalore', source: 'India Today', url: '#', publishedAt: new Date(Date.now() - 8 * 3600000).toISOString(), incidentType: 'suspicious', riskLevel: 'Medium' },
+  { id: 'n4', title: 'Woman harassed near Sarafa Bazaar, accused arrested', description: 'Indore police arrested a man for stalking and harassing a woman near Sarafa Bazaar. The incident was reported through a community safety app.', location: 'Sarafa Bazaar, Indore', source: 'Dainik Bhaskar', url: '#', publishedAt: new Date(Date.now() - 12 * 3600000).toISOString(), incidentType: 'harassment', riskLevel: 'High' },
+  { id: 'n5', title: 'CCTV cameras installed at HITEC City crossroads', description: 'Hyderabad traffic police have installed 15 new CCTV cameras at HITEC City junctions. This move aims to reduce accidents and improve pedestrian safety.', location: 'HITEC City, Hyderabad', source: 'ANI', url: '#', publishedAt: new Date(Date.now() - 18 * 3600000).toISOString(), incidentType: 'accident', riskLevel: 'Low' },
+  { id: 'n6', title: 'Auto-rickshaw driver assaults passenger in Pune', description: 'A female passenger was assaulted by an auto-rickshaw driver near FC Road. Police have registered an FIR and the accused is in custody.', location: 'FC Road, Pune', source: 'Hindustan Times', url: '#', publishedAt: new Date(Date.now() - 24 * 3600000).toISOString(), incidentType: 'assault', riskLevel: 'High' },
+  { id: 'n7', title: 'Night patrol strengthened in Marina Beach area', description: 'Chennai police have increased night patrols along Marina Beach following reports of suspicious activities. Beach-goers are advised to avoid isolated stretches after 10 PM.', location: 'Marina Beach, Chennai', source: 'The Hindu', url: '#', publishedAt: new Date(Date.now() - 30 * 3600000).toISOString(), incidentType: 'suspicious', riskLevel: 'Medium' },
+  { id: 'n8', title: 'Road accident near Gateway of India injures 2 pedestrians', description: 'A speeding car hit two pedestrians near the Gateway of India promenade. Both victims are stable and receiving treatment at a nearby hospital.', location: 'Colaba, Mumbai', source: 'Times Now', url: '#', publishedAt: new Date(Date.now() - 36 * 3600000).toISOString(), incidentType: 'accident', riskLevel: 'Medium' },
+  { id: 'n9', title: 'Community patrol launched in Vijay Nagar, Indore', description: 'Resident welfare associations in Vijay Nagar have launched a volunteer night patrol initiative. Over 40 volunteers are participating in nightly rounds.', location: 'Vijay Nagar, Indore', source: 'Dainik Bhaskar', url: '#', publishedAt: new Date(Date.now() - 40 * 3600000).toISOString(), incidentType: 'suspicious', riskLevel: 'Low' },
+  { id: 'n10', title: 'Stalking case reported at Indiranagar metro station', description: 'A 23-year-old woman filed a complaint about being followed from Indiranagar metro station to her apartment for three days. Police have detained a suspect.', location: 'Indiranagar, Bangalore', source: 'India Today', url: '#', publishedAt: new Date(Date.now() - 44 * 3600000).toISOString(), incidentType: 'harassment', riskLevel: 'High' },
+];
+
   const loadNews = useCallback(async (force = false) => {
     const cached = localStorage.getItem(CACHE_KEY);
     const ts = parseInt(localStorage.getItem(CACHE_TS_KEY) || '0');
@@ -159,8 +172,16 @@ export default function LiveNewsSection() {
         setLastFetched(new Date());
       }
     } catch (e) {
-      // Use cached even if stale
-      if (cached) setNews(JSON.parse(cached));
+      // Use cached if available, otherwise use built-in mock data
+      if (cached) {
+        setNews(JSON.parse(cached));
+      } else {
+        // Use mock news data
+        localStorage.setItem(CACHE_KEY, JSON.stringify(MOCK_NEWS));
+        localStorage.setItem(CACHE_TS_KEY, String(Date.now()));
+        setNews(MOCK_NEWS);
+        setLastFetched(new Date());
+      }
     } finally {
       setLoading(false);
     }

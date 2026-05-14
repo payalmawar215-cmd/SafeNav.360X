@@ -1,6 +1,6 @@
 import { useLanguage } from '@/lib/i18n.jsx';
 import { motion } from 'framer-motion';
-import { Clock, Route, Shield, ShieldCheck, ShieldAlert, Zap, ChevronRight } from 'lucide-react';
+import { Clock, Route, Shield, ShieldCheck, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import SafetyBadge from '@/components/common/SafetyBadge';
 

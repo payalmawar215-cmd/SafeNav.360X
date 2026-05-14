@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { X, Download, Trash2, CheckCircle2, WifiOff, MapPin, Loader2, HardDrive } from 'lucide-react';
 import {
   CITY_DATA, detectNearestCity, getDownloadedCities,
-  downloadCityMap, deleteCityMap, isCityDownloaded
+  downloadCityMap, deleteCityMap
 } from '@/lib/offlineMaps';
 import { useAppContext } from '@/lib/AppContext.jsx';
 

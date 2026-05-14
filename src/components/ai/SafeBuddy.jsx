@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '@/lib/AppContext.jsx';
 import { base44 } from '@/api/base44Client';
 import {
-  X, Send, Mic, MapPin, Phone, Users, Navigation,
-  AlertTriangle, MessageCircle, Loader2, Shield
+  X, Send, MapPin, Phone, Users, Navigation,
+  AlertTriangle, Loader2, Shield
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 

@@ -1,6 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Bell } from 'lucide-react';
-import { PRIORITY } from '@/lib/notificationEngine';
 
 export default function NotificationBell({ count, hasUrgent, onClick }) {
   return (

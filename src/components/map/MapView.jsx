@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Circle, useMap } from 'react-leaflet';
 import { useAppContext } from '@/lib/AppContext.jsx';
 import { UNSAFE_ZONES, COMMUNITY_REPORTS } from '@/lib/mockData';

@@ -2,12 +2,11 @@ import { useState, useEffect, useRef } from 'react';
 import { useQueryClient, useQuery, useMutation } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Phone, ChevronLeft, AlertTriangle, Shield, WifiOff } from 'lucide-react';
-import { getAnonymousId, buildLocationMessage, buildSOSMessage, queueOfflineMessage, formatTime } from '@/lib/chatUtils';
+import { Phone, ChevronLeft, AlertTriangle, WifiOff } from 'lucide-react';
+import { getAnonymousId, buildLocationMessage, queueOfflineMessage } from '@/lib/chatUtils';
 import { useAppContext } from '@/lib/AppContext.jsx';
 import MessageBubble from './MessageBubble';
 import ChatInput from './ChatInput';
-import { cn } from '@/lib/utils';
 
 function fetchMessages(contactId, userId) {
   return base44.entities.ChatMessage.filter(
@@ -113,11 +112,11 @@ export default function ChatWindow({ contact, isGroup, groupContacts, onBack, so
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         pos => send(pos.coords.latitude, pos.coords.longitude),
-        () => send(userLocation.lat, userLocation.lng),
+        () => send(userLocation?.lat, userLocation?.lng),
         { timeout: 5000, enableHighAccuracy: true }
       );
     } else {
-      send(userLocation.lat, userLocation.lng);
+      send(userLocation?.lat, userLocation?.lng);
     }
   };
 

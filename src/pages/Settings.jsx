@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import {
   Globe, Shield, Phone, Users, Moon, Bell, ChevronRight,
-  Plus, Trash2, Camera, Mic, AlertOctagon, PhoneCall, Zap,
+  Plus, Trash2, Camera, Mic, PhoneCall, Zap,
   Smartphone, Waves, UserCircle, Lock, Eye, Award
 } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';

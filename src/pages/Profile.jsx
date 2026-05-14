@@ -26,7 +26,7 @@ export default function Profile() {
         <div>
           <p className="font-black text-lg" style={{ color: '#0D1B2E' }}>SafeNav User</p>
           <p className="text-xs mt-0.5 flex items-center gap-1" style={{ color: 'rgba(13,27,46,0.5)' }}>
-            <MapPin className="w-3 h-3" /> {userLocation.lat.toFixed(3)}, {userLocation.lng.toFixed(3)}
+            <MapPin className="w-3 h-3" /> {userLocation?.lat?.toFixed(3)}, {userLocation?.lng?.toFixed(3)}
           </p>
         </div>
       </div>

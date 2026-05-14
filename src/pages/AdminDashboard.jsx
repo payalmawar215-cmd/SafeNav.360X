@@ -4,10 +4,8 @@ import { useAuth } from '@/lib/AuthContext';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import {
-  Shield, AlertTriangle, CheckCircle2, Clock, Flag, Trash2,
-  RefreshCw, Loader2, Filter, Lock, TrendingUp, Users,
-  MapPin, Eye, BarChart2, ChevronRight, X, Map
+import { AlertTriangle, CheckCircle2, Clock, Flag, Trash2,
+  RefreshCw, Loader2, Filter, Lock, BarChart2, X, Map
 } from 'lucide-react';
 import { MapContainer, TileLayer, Circle, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';

@@ -2,11 +2,11 @@ import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/lib/AuthContext';
 import { base44 } from '@/api/base44Client';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ArrowLeft, Camera, Edit3, Save, X, Shield, Zap, Star,
-  Award, TrendingUp, CheckCircle2, Lock, Crown, ChevronRight
+  Award, TrendingUp, CheckCircle2, Lock, Crown
 } from 'lucide-react';
 
 const RANKS = [

@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useLanguage } from '@/lib/i18n.jsx';
 import { useAppContext } from '@/lib/AppContext.jsx';
-import { motion } from 'framer-motion';
-import { Navigation, X, RotateCw, MapPin, Clock, Shield, Share2 } from 'lucide-react';
+import { X, RotateCw, Clock, Share2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import MapView from '@/components/map/MapView';
 import SafetyBadge from '@/components/common/SafetyBadge';

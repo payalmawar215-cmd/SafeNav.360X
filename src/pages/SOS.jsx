@@ -1,26 +1,27 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/lib/i18n.jsx';
 import { useAppContext } from '@/lib/AppContext.jsx';
 import { base44 } from '@/api/base44Client';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   Phone, MessageCircle, MapPin, CheckCircle2, Share2,
-  Camera, Mic, X, AlertTriangle, Clock, Radio, Loader2, Zap
+  Camera, Mic, X, Clock, Radio, Loader2
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useEvidenceCapture } from '@/hooks/useEvidenceCapture';
 import { getAnonymousId } from '@/lib/chatUtils';
 
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
-  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
-});
+if (typeof L !== 'undefined' && L.Icon && L.Icon.Default) {
+  delete L.Icon.Default.prototype._getIconUrl;
+  L.Icon.Default.mergeOptions({
+    iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
+    iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+  });
+}
 
 function MapCenter({ lat, lng }) {
   const map = useMap();
@@ -62,10 +63,10 @@ export default function SOS() {
   const [seenBy, setSeenBy] = useState({}); // contactId -> true
   const anonId = getAnonymousId();
 
-  const locationUrl = `https://maps.google.com/?q=${userLocation.lat},${userLocation.lng}`;
-  const whatsappMsg = encodeURIComponent(
+  const locationUrl = userLocation ? `https://maps.google.com/?q=${userLocation.lat},${userLocation.lng}` : '';
+  const whatsappMsg = locationUrl ? encodeURIComponent(
     `🚨 EMERGENCY SOS!\nI need immediate help!\n📍 Location: ${locationUrl}\n⏰ ${new Date().toLocaleTimeString()}\n— SafeNav360X`
-  );
+  ) : '';
 
   useEffect(() => {
     reverseGeocode(userLocation.lat, userLocation.lng).then(setAddress);

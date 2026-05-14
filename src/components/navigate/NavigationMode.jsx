@@ -3,7 +3,7 @@ import { MapContainer, TileLayer } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Clock, Route, Navigation, Share2, AlertTriangle, Volume2, VolumeX, Layers } from 'lucide-react';
+import { X, Navigation, Share2, Volume2, VolumeX, Layers } from 'lucide-react';
 import SafetyBadge from '@/components/common/SafetyBadge';
 import UserLocationMarker from './UserLocationMarker';
 import RoutePolylines from './RoutePolylines';

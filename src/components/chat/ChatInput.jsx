@@ -1,7 +1,6 @@
 import { useState, useRef } from 'react';
 import { Send, MapPin, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { cn } from '@/lib/utils';
 
 export default function ChatInput({ onSend, onLocationShare, isSending, isLocating, disabled }) {
   const [text, setText] = useState('');
